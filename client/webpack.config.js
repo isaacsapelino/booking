@@ -1,43 +1,44 @@
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const htmlPlugin = new HtmlWebPackPlugin({
- template: "./dist/index.html",
- filename: "./index.html"
-});
-
 const path = require('path');
-
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
-    mode: 'development',
-    entry: path.resolve(__dirname, 'src') + '/index.js',
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js',
-        publicPath:'/',
+  entry: './src/index',
+  output: {
+    path: path.join(__dirname, '/dist'),
+    filename: 'bundle.js',
+    publicPath: '/'
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']
+  },
+  module: {
+    rules: [
+    {
+      test: /\.(js)x?$/,
+      exclude: /node_modules/,
+      use: {
+        loader: 'babel-loader'
+      },
     },
-    resolve: {
-        extensions: ['.js', '.jsx', '.png', '.jpg'],
+    
+    {
+      test: /\.css$/,
+      use: ['style-loader', 'css-loader']
     },
-    module: {
-        rules: [{
-            test: /\.(jsx|js)$/,
-            exclude: [/node_modules/, /dist/],
-            use: {
-                loader: "babel-loader"
-            }
-        },
-        {
-            test: /\.css$/,
-            use: ["style-loader", "css-loader"]
-        },
-        {
-            test: /\.(png|svg|jpg|jpeg|gif)$/i,
-            type: 'asset/resource',
-        }
-    ]},
-    plugins: [htmlPlugin],
-    devServer: {
-        compress: true,
-        contentBase: path.join(__dirname, 'dist'),
-        port: 5000
+    {
+      test: /\.(png|svg|jpg|jpeg|gif|ico)$/,
+      exclude: /node_modules/,
+      use: ['file-loader?name=[name].[ext]'] 
     }
+  ]
+},
+devServer: {
+    historyApiFallback: true,
+    port: 5000,
+    compress: true,
+},
+plugins: [
+  new HtmlWebpackPlugin({
+    template: './public/index.html',
+  })
+ ]
 };

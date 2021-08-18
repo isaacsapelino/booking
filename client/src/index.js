@@ -1,12 +1,14 @@
+import React from 'react'
 import ReactDOM from 'react-dom';
-import React from 'react';
-import { Provider } from 'react-redux';
-import { init } from '@rematch/core';
-import { Appointments } from './models';
 import App from './components/App';
+import { init } from '@rematch/core';
+import { Agents } from './models';
+import { Provider } from 'react-redux';
 
 const store = init({
-    models: {Appointments,},
+    models: {
+        Agents,
+    }
 })
 
 ReactDOM.render(

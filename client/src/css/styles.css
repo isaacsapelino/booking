@@ -1,4 +1,5 @@
+/* Rest margins and paddings */
 * {
-    margin: 0px;
-    padding: 0px;
+    margin: 0em;
+    padding: 0em;
 }

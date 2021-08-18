@@ -1,1 +1,0 @@
-# react-rematch-boilerplate javascript

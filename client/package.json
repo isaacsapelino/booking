@@ -2,10 +2,11 @@
   "name": "react-rematch-boilerplate",
   "version": "1.0.0",
   "description": "",
-  "main": "webpack.config.js",
+  "main": "index.js",
   "scripts": {
-    "start": "webpack serve",
-    "build": "webpack"
+    "bundle": "webpack",
+    "start": "webpack serve --mode development --hot",
+    "build": "webpack --mode production"
   },
   "keywords": [],
   "author": "",
@@ -13,11 +14,12 @@
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.14.7",
+    "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.14.5",
     "babel-loader": "^8.2.2",
-    "babel-plugin-transform-imports": "^2.0.0",
-    "babel-preset-react": "^6.24.1",
     "css-loader": "^6.2.0",
+    "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.2",
     "style-loader": "^3.2.1",
     "webpack": "^5.50.0",
@@ -25,17 +27,18 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "@date-io/moment": "^2.11.0",
+    "@date-io/date-fns": "^1.3.13",
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/pickers": "^3.3.10",
     "@material-ui/styles": "^4.11.4",
     "@rematch/core": "^2.1.0",
     "axios": "^0.21.1",
-    "dotenv": "^10.0.0",
+    "date-fns": "^2.23.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.4",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "regenerator-runtime": "^0.13.9"
   }
 }

@@ -1,75 +1,200 @@
-import React, {useState} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField'
-
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import FormControl from '@material-ui/core/FormControl';
-import MenuItem from '@material-ui/core/MenuItem';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-
+import React, { Fragment, useState } from 'react';
+import {
+    Paper,
+    TextField,
+    Button,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    FormHelperText,
+    Divider,
+    Box,
+    InputAdornment,
+    Grid,
+} from '@material-ui/core';
+import {
+    Business,
+    LocationCity,
+    AccountCircle,
+    Phone,
+} from '@material-ui/icons';
+import {
+    KeyboardDatePicker,
+    KeyboardTimePicker,
+} from "@material-ui/pickers";
+import { makeStyles,} from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
-            margin: theme.spacing(1),
-            width: '25vw',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection:'column',
+            padding: theme.spacing(3),
+            paddingBottom: theme.spacing(5),
+            width: theme.spacing(60),
+        },
+        '& h1' : {
+            fontFamily: 'Roboto',
+            marginBottom: theme.spacing(0),
+        },
+        '& p': {
+            fontFamily: 'Montserrat',
         },
     },
     formControl: {
-        marginTop: theme.spacing(-1),
+        marginTop: theme.spacing(1),
         marginBottom: theme.spacing(2),
+    },
+    input: {
+        root: {
+            fontFamily: 'Montserrat',
+        }
+    },
+    dateTime: {
+        root: {
+            flexGrow: 1,
+        }
     }
-}));
+}))
 
-const AppointmentForm = () => {
-    const appointmentFormStyle = useStyles();
-    const [state, setState] = useState({
-        appointmentName: '',
-        place: ''
-    })
+const validateEmail = (email) => {
+    const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return email.match(regexEmail) ? true : false;
+}
+
+function AppointmentForm() {
+    const classes = useStyles();
+
     const [property, setProperty] = useState('');
+    const [propName, setPropName] = useState('');
+    const [propLoc, setPropLoc] = useState('');
+
+    const [selectedDate, setDate] = useState(new Date());
+    const [selectedTime, setTime] = useState(new Date());
+    const [agent, setAgent] = useState('');
+
     const handleChange = (event) => {
         setProperty(event.target.value);
     }
+
+    const handleAgent = (event) => {
+        setAgent(event.target.value);
+    }
+
     return (
-        <div>
-            <form className={appointmentFormStyle.root} noValidate autoComplete="off">
-                <TextField id="standard-basic" inputProps={{
-                            style: {fontSize: '1em', fontFamily: 'Montserrat'}
-                    }} placeholder="Property Name" variant="standard" helperText="What's the name of property?" />
-                
-                <TextField id="standard-basic" inputProps={{
-                            style: {fontSize: '1em', fontFamily: 'Montserrat'}
-                        }} placeholder="Location of property" variant="standard" helperText="Where's the address of the property?" />
-                <FormControl className={appointmentFormStyle.formControl}>
-                    <InputLabel htmlFor="property-type">Type of property</InputLabel>
-                    <Select
-                        native
-                        value={property}
-                        onChange={handleChange}
-                        inputProps={{
-                            name: 'property',
-                            id: 'property-type'
-                        }}
-                    >
-                        <option aria-label="None" value="" />
-                        <option value={"Land"}>Land</option>
-                        <option value={"Building"}>Building</option>
-                    </Select>
-                </FormControl>
-                <TextField id="standard-basic" inputProps={{
-                            style: {fontSize: '1em', fontFamily: 'Montserrat'}
-                        }} placeholder="Agent's Name" variant="standard" />
-                <FormControl>
-                    <Button variant="contained" color="primary">
-                            Submit
-                    </Button>
-                </FormControl>
-            </form>
-        </div>
-    );
+        <Fragment>
+            <div className={classes.root}>
+                <Paper elevation={2}>
+                    <h1>Appointment</h1>
+                    <p>Set your appointments here</p>
+                    <Box width={400} mt={4}>
+                        <TextField id="standard-basic" label="Property Name" fullWidth inputProps={{
+                            
+                        }} className={classes.textField} InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Business />
+                                </InputAdornment>
+                            ),
+                        }} value={propName} onChange={(event) => setPropName(event.target.value)} />
+                    </Box>
+                    <Box width={400} mt={1} >
+                        <TextField id="standard-basic" label="Property Address" fullWidth InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <LocationCity />
+                                </InputAdornment>
+                            ),
+                        }} value={propLoc} onChange={(event) => setPropLoc(event.target.value)} />
+                    </Box>
+                    <Box width={400} mt={1}>
+                        <FormControl className={classes.formControl} fullWidth>
+                            <InputLabel id="demo-simple-select-label">Type of property</InputLabel>
+                            <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={property}
+                            onChange={handleChange}
+                            >
+                                <MenuItem value={'Land'}>Land</MenuItem>
+                                <MenuItem value={'Building'}>Building</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <Box width={450} mt={1} mb={2}>
+                        <Divider/>
+                    </Box>
+                    <Box width={400}>
+                        <TextField id="standard-basic" label="Agent's Name" fullWidth InputProps={{
+                            startAdornment: ((
+                                <InputAdornment position="start">
+                                    <AccountCircle />
+                                </InputAdornment>
+                            ))
+                        }} />
+                    </Box>
+                    <Box width={400} mt={1}>
+                        <TextField id="standard-basic" label="Phone Number or Email" fullWidth InputProps={{
+                            startAdornment: ((
+                                <InputAdornment position="start">
+                                    <Phone/>
+                                </InputAdornment>
+                            ))
+                        }} />
+                    </Box>
+                    <Box width={400}>
+                        <FormControl className={classes.formControl} fullWidth>
+                            <InputLabel id="demo-simple-select-label">Agent's Group</InputLabel>
+                            <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={agent}
+                            onChange={handleAgent}
+                            >
+                                <MenuItem value={'Land'}>Paul</MenuItem>
+                                <MenuItem value={'Building'}>John</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <div>
+                        <Grid container spacing={6} >
+                            <Grid item xs={6}>
+                                <Box width={175}>
+                                    <KeyboardDatePicker
+                                        placeholder="01/01/2021"
+                                        clearable
+                                        label="Set date"
+                                        format="MM/dd/yyyy"
+                                        value={selectedDate}
+                                        onChange={date => setDate(date)}
+                                        minDate={new Date()}
+                                    />
+                                </Box>
+                            </Grid>
+                            <Grid item xs={1}>
+                                <Box width={175}>
+                                    <KeyboardTimePicker
+                                        placeholder="08:00 PM"
+                                        clearable
+                                        label="Set time"
+                                        mask="__:__ _M"
+                                        value={selectedTime}
+                                        onChange={time => setTime(time)}
+                                    />
+                                </Box>
+                            </Grid>
+                        </Grid>
+                    </div>
+                    <Box width={400} mt={4}>
+                        <Button variant="contained" color="primary" fullWidth>Submit</Button>
+                    </Box>                    
+                </Paper>
+            </div>
+        </Fragment>
+    )
 }
 
 export default AppointmentForm;

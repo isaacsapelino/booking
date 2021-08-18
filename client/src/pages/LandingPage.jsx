@@ -1,59 +1,60 @@
-import React from 'react';
-import AppointmentForm from '../containers/AppointmentForm';
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import { Typography, Container } from '@material-ui/core';
-import background from '../../assets/img/background.png';
+import React, { Fragment, useEffect } from 'react';
+import backgroundImage from '../../assets/img/background.png';
+import { Container } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import {
+    AppointmentForm
+} from '../containers';
 
-const box = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    paddingTop: '1em',
-}
+import { connect } from 'react-redux';
 
-const appointmentBox = {
-    paddingTop: '1em',
-    marginTop: '2em',
-    width: '35em',
-    textAlign: 'center',
-    backgroundColor: 'white',
-    borderRadius: '1em',
-    height: '30em',
-}
+const landingLayouts = makeStyles( (theme) => ({
+    root: {
+        '& > *': {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingTop: '3em',
+        }
+    },
+}));
 
-const landing = {
-    height: '100vh',
-    background: `url(${background}) fixed center`,
-    backgroundSize: 'cover',
-}
+function LandingPage({agents, loadAgents}) {
+    
+    if (Object.keys(agents).length === 0) {
+        useEffect(() => {
+            loadAgents();
+            console.log(agents);
+             }, [Object.keys(agents).length === 0]);
+    }
 
-const theme = createTheme();
-theme.typography.h2 = {
-    fontFamily: 'Roboto',
-    fontSize: '3em',
-}
+    const classes = landingLayouts();
 
-theme.typography.body1 = {
-    fontFamily: 'Montserrat',
-    fontWeight: 50,
-    fontSize: '1.2em',
-}
+    const landingStyles = {
+        background: `url(${backgroundImage}) fixed center`,
+        backgroundSize: 'cover',
+        height: '105vh',
+    }
 
-const LandingPage = () => {
-    return (    
-        <div style={landing}>
-            <div style={box}>
-                <div style={appointmentBox}>
-                    <ThemeProvider theme={theme}>
-                        <Typography variant="h2">Appointment</Typography>
-                        <Typography variant="body1">Set your appointments here</Typography>
-                    </ThemeProvider>
-                    <AppointmentForm />
-                </div>
+    return (
+        <Fragment>
+            <div style={landingStyles} >
+                <div className={classes.root}>
+                    <Container maxWidth="lg">
+                        <AppointmentForm />
+                    </Container>       
+                </div>         
             </div>
-        </div>
-    );
+        </Fragment>
+    )
 }
 
-export default LandingPage;
+const mapState = (state) => ({
+    agents: state.Agents,
+})
+
+const mapDispatch = (dispatch) => ({
+    loadAgents: dispatch.Agents.loadAgents,
+})
+
+export default connect(mapState, mapDispatch)(LandingPage);

@@ -5,7 +5,7 @@ export const Agents = {
     state: {},
     reducers: {
         agents(state, payload) {
-            return [...state, payload]
+            return payload
         }
     },
     effects: (dispatch) => ({
@@ -14,7 +14,7 @@ export const Agents = {
                 .then(res => {
                     this.agents(res.data);
                 })
-                .catch(e => console.log(e.res.data));
+                .catch(e => console.log(e));
         }
     })
 }

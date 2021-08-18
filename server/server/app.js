@@ -13,6 +13,7 @@ const morgan = require('morgan');
 /* Models */
 const users = require('./models/users');
 const booking = require('./models/booking');
+const appointment = require('./models/agents');
 
 /* Routes */
 const routes = require('./routes');
@@ -30,6 +31,7 @@ app.use(express.urlencoded({
 
 app.use('/api/user', routes.user);
 app.use('/api/booking', routes.booking);
+app.use('/api/agents', routes.agents);
 app.get('/api', (req, res) => {
     res.send('Hello World');
 })

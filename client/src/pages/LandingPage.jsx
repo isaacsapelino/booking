@@ -21,12 +21,17 @@ const landingLayouts = makeStyles( (theme) => ({
 
 function LandingPage({agents, loadAgents}) {
     
-    if (Object.keys(agents).length === 0) {
-        useEffect(() => {
-            loadAgents();
-            console.log(agents);
-             }, [Object.keys(agents).length === 0]);
-    }
+    // if (Object.keys(agents).length === 0) {
+    //     useEffect(() => {
+    //         loadAgents();
+    //         console.log(agents);
+    //          }, [Object.keys(agents).length === 0]);
+    // }
+
+    useEffect(() => {
+        console.log("Executed");
+        loadAgents();
+    }, [])
 
     const classes = landingLayouts();
 

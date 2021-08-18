@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import {
     Paper,
     TextField,
@@ -23,7 +23,8 @@ import {
     KeyboardDatePicker,
     KeyboardTimePicker,
 } from "@material-ui/pickers";
-import { makeStyles,} from '@material-ui/core/styles';
+import { makeStyles, } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -65,16 +66,15 @@ const validateEmail = (email) => {
     return email.match(regexEmail) ? true : false;
 }
 
-function AppointmentForm() {
+function AppointmentForm({agents, loadAgents}) {
     const classes = useStyles();
-
     const [property, setProperty] = useState('');
     const [propName, setPropName] = useState('');
     const [propLoc, setPropLoc] = useState('');
 
     const [selectedDate, setDate] = useState(new Date());
     const [selectedTime, setTime] = useState(new Date());
-    const [agent, setAgent] = useState('');
+    const [agent, setAgent] = useState([]);
 
     const handleChange = (event) => {
         setProperty(event.target.value);
@@ -110,7 +110,7 @@ function AppointmentForm() {
                             ),
                         }} value={propLoc} onChange={(event) => setPropLoc(event.target.value)} />
                     </Box>
-                    <Box width={400} mt={1}>
+                    <Box width={400} mt={1} mb={1}>
                         <FormControl className={classes.formControl} fullWidth>
                             <InputLabel id="demo-simple-select-label">Type of property</InputLabel>
                             <Select
@@ -124,9 +124,7 @@ function AppointmentForm() {
                             </Select>
                         </FormControl>
                     </Box>
-                    <Box width={450} mt={1} mb={2}>
-                        <Divider/>
-                    </Box>
+                    
                     <Box width={400}>
                         <TextField id="standard-basic" label="Agent's Name" fullWidth InputProps={{
                             startAdornment: ((
@@ -154,8 +152,9 @@ function AppointmentForm() {
                             value={agent}
                             onChange={handleAgent}
                             >
-                                <MenuItem value={'Land'}>Paul</MenuItem>
-                                <MenuItem value={'Building'}>John</MenuItem>
+                                {agents.success === true ? agents.payload.map(x => (
+                                    <MenuItem key={x.id} value={x.agentsName}>{x.agentsName}</MenuItem>
+                                )) : console.log(agents.message) }
                             </Select>
                         </FormControl>
                     </Box>
@@ -197,4 +196,12 @@ function AppointmentForm() {
     )
 }
 
-export default AppointmentForm;
+const mapState = (state) => ({
+    agents: state.Agents,
+})
+
+const mapDispatch = (dispatch) => ({
+    loadAgents: dispatch.Agents.loadAgents,
+})
+
+export default connect(mapState,mapDispatch)(AppointmentForm);

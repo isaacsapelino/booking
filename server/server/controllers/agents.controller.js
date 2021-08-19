@@ -1,4 +1,5 @@
 const Agents = require('../models/agents');
+const Booking = require('../models/booking');
 
 exports.getAgents = async (req, res) => {
     const agents = await Agents.findAll()
@@ -17,7 +18,7 @@ exports.getAgents = async (req, res) => {
 }
 
 exports.setAgents = async (req, res) => {
-    try {  
+    try {
         const { agentsName } = req.body;
         const agents = await Agents.create({
             agentsName

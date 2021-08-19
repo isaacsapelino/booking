@@ -66,7 +66,7 @@ const validateEmail = (email) => {
     return email.match(regexEmail) ? true : false;
 }
 
-function AppointmentForm({agents, loadAgents}) {
+function AppointmentForm({agents, books, loadAgents, setBooking, getBookings}) {
     const classes = useStyles();
     const [property, setProperty] = useState('');
     const [propName, setPropName] = useState('');
@@ -74,14 +74,35 @@ function AppointmentForm({agents, loadAgents}) {
 
     const [selectedDate, setDate] = useState(new Date());
     const [selectedTime, setTime] = useState(new Date());
-    const [agent, setAgent] = useState([]);
+    const [agentName, setAgentName] = useState('');
+    const [agentGroup, setAgentGroup] = useState([]);
+
+    useEffect(() => {
+        getBookings();
+    }, []);
+
+    const handleClick = (e) => {
+        e.preventDefault();
+        const states = {
+            propertyName: propName,
+            propertyLocation: propLoc,
+            property,
+            agName: agentName,
+            agentsName: agentGroup,
+            appointmentDate: selectedDate,
+            appointmentTime: selectedTime,
+        }
+        console.log(states);
+        setBooking(states);
+    }
 
     const handleChange = (event) => {
         setProperty(event.target.value);
     }
 
-    const handleAgent = (event) => {
-        setAgent(event.target.value);
+    const handleAgentGroup = (event) => {
+        setAgentGroup(event.target.value);
+        
     }
 
     return (
@@ -93,7 +114,7 @@ function AppointmentForm({agents, loadAgents}) {
                     <Box width={400} mt={4}>
                         <TextField id="standard-basic" label="Property Name" fullWidth inputProps={{
                             
-                        }} className={classes.textField} InputProps={{
+                        }} className={classes.textField} InputProps={{ 
                             startAdornment: (
                                 <InputAdornment position="start">
                                     <Business />
@@ -126,7 +147,7 @@ function AppointmentForm({agents, loadAgents}) {
                     </Box>
                     
                     <Box width={400}>
-                        <TextField id="standard-basic" label="Agent's Name" fullWidth InputProps={{
+                        <TextField id="standard-basic" label="Agent's Name" fullWidth value={agentName} onChange={(event) => setAgentName(event.target.value)} InputProps={{
                             startAdornment: ((
                                 <InputAdornment position="start">
                                     <AccountCircle />
@@ -149,11 +170,11 @@ function AppointmentForm({agents, loadAgents}) {
                             <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            value={agent}
-                            onChange={handleAgent}
+                            value={agentGroup}
+                            onChange={handleAgentGroup}
                             >
                                 {agents.success === true ? agents.payload.map(x => (
-                                    <MenuItem key={x.id} value={x.agentsName}>{x.agentsName}</MenuItem>
+                                    <MenuItem key={x.id} value={x.id}>{x.agentsName}</MenuItem>
                                 )) : console.log(agents.message) }
                             </Select>
                         </FormControl>
@@ -188,7 +209,7 @@ function AppointmentForm({agents, loadAgents}) {
                         </Grid>
                     </div>
                     <Box width={400} mt={4}>
-                        <Button variant="contained" color="primary" fullWidth>Submit</Button>
+                        <Button variant="contained" color="primary" fullWidth onClick={handleClick}>Submit</Button>
                     </Box>                    
                 </Paper>
             </div>
@@ -198,10 +219,13 @@ function AppointmentForm({agents, loadAgents}) {
 
 const mapState = (state) => ({
     agents: state.Agents,
+    books: state.Book,
 })
 
 const mapDispatch = (dispatch) => ({
     loadAgents: dispatch.Agents.loadAgents,
+    setBooking: dispatch.Book.setBooking,
+    getBookings: dispatch.Book.getBookings,
 })
 
 export default connect(mapState,mapDispatch)(AppointmentForm);

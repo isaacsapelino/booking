@@ -8,13 +8,23 @@ const bookingScheme = sequelize.define('Bookings', {
         autoIncrement: true,
         allowNull: false
     },
-    appointmentName: DataTypes.STRING,
-    appointmentDate: DataTypes.DATE,
+    propertyName: DataTypes.STRING,
+    propertyLocation: DataTypes.STRING,
+    property: DataTypes.STRING,
+    agName: DataTypes.STRING,
+    appointmentDate: DataTypes.STRING,
     appointmentTime: DataTypes.STRING,
-    place: DataTypes.STRING,
 }, {
     freezeTableName: true,
     timestamps: true
 });
+
+bookingScheme.associate = models => {
+    bookingScheme.belongsTo(models.Agents, {
+        foreignKey: {
+            allowNull: false
+        }
+    })
+}
 
 module.exports = bookingScheme;

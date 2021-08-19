@@ -38,7 +38,7 @@ function LandingPage({agents, loadAgents}) {
     const landingStyles = {
         background: `url(${backgroundImage}) fixed center`,
         backgroundSize: 'cover',
-        height: '105vh',
+        height: '100vh',
     }
 
     return (

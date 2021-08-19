@@ -13,10 +13,18 @@ const morgan = require('morgan');
 /* Models */
 const users = require('./models/users');
 const booking = require('./models/booking');
-const appointment = require('./models/agents');
+const agents = require('./models/agents');
 
 /* Routes */
 const routes = require('./routes');
+
+/* Relations */
+booking.belongsTo(agents, {
+    foreignKey: {
+        name: 'agentsName',
+        allowNull: false, 
+    }
+});
 
 /* Libraries */
 app.use(helmet());
@@ -36,8 +44,7 @@ app.get('/api', (req, res) => {
     res.send('Hello World');
 })
 
-
-sequelize.sync()
+sequelize.sync({force: true})
     .then(result => {
         console.log(`Database has been connected to port ${result.config.port}`);
         app.listen(PORT, () => {

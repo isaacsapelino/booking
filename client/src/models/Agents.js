@@ -10,7 +10,7 @@ export const Agents = {
     },
     effects: (dispatch) => ({
         async loadAgents(payload, rootState) {
-            axios.get('http://localhost:3000/api/agents')
+            await axios.get('http://localhost:3000/api/agents')
                 .then(res => {
                     this.agents(res.data);
                 })

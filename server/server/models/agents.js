@@ -1,5 +1,6 @@
 const { DataTypes } = require('Sequelize');
 const sequelize = require('../db/database');
+const booking = require('./booking');
 
 const agentsScheme = sequelize.define('Agents', {
     id: {
